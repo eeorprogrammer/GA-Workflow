@@ -1,0 +1,20 @@
+name: sql insert record test
+on: [workflow_dispatch]
+
+jobs:
+  test-output:
+    runs-on: ["ubuntu"]
+    steps:
+      - name: test output
+        run: echo "SQL Test Record Insert"
+
+  connect-remote:
+    runs-on: ["ubuntu"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install a SQL Server suite of tools
+        uses: potatoqualitee/mssqlsuite@v1.7
+        with:
+          install: sqlengine, sqlclient
+      - name: connect to database
+        run: sqlcmd -S ${{ secrets.DW_SERVER }} -U ${{ secrets.DB_USER }} -P ${{ secrets.DB_PASSWORD }} -d ${{ secrets.DW_DATABASE }} -Q "SELECT @@version;"
